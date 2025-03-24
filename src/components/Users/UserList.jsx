@@ -14,6 +14,16 @@ const UserList = () => {
     handleDelete,
   } = useContext(UserContext);
 
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter users based on the search query
+  const filteredUsers = users.filter(
+    (user) =>
+      user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.last_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   if (loading) {
     return <div>Loading users...</div>;
   }
@@ -24,11 +34,22 @@ const UserList = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <h2 className="text-2xl font-semibold mb-25 flex justify-center">
+      <h2 className="text-2xl font-semibold mb-10 flex justify-center">
         Users List
       </h2>
+
+      <div className="mb-20 flex justify-center">
+        <input
+          type="text"
+          placeholder="Search by name or email..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="px-4 py-2 border border-gray-300 rounded"
+        />
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {users.map((user) => (
+        {filteredUsers.map((user) => (
           <div
             key={user.id}
             className="bg-white rounded-lg shadow-md p-4 mb-15"
@@ -59,6 +80,8 @@ const UserList = () => {
           </div>
         ))}
       </div>
+
+      {/* Pagination controls */}
       <div className="flex justify-center mt-4">
         <button
           onClick={() => handlePageChange(page - 1)}
