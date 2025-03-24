@@ -75,3 +75,7 @@ The application uses the following Reqres API endpoints:
 ## Error Handling
 
 The application handles API errors gracefully by displaying appropriate error messages to the user. Form validation is implemented in the login and edit screens to ensure data integrity.
+
+## Hosted Link
+
+employ-wise-fe.vercel.app
