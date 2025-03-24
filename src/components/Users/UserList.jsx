@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "@context/UserContext";
 
 const UserList = () => {
+  const navigate = useNavigate();
   const {
     users,
     loading,
@@ -16,7 +17,13 @@ const UserList = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter users based on the search query
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const filteredUsers = users.filter(
     (user) =>
       user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -81,7 +88,6 @@ const UserList = () => {
         ))}
       </div>
 
-      {/* Pagination controls */}
       <div className="flex justify-center mt-4">
         <button
           onClick={() => handlePageChange(page - 1)}
