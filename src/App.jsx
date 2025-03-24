@@ -7,18 +7,21 @@ import {
 } from "react-router-dom";
 import Login from "./components/Authentication/Login";
 import UserList from "./components/Users/UserList";
+import EditUser from "./components/Users/EditUser";
+import { UserProvider } from "@context/UserContext";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-
-        <Route path="/login" element={<Login />} />
-
-        <Route path="/users" element={<UserList />} />
-      </Routes>
-    </Router>
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/users" element={<UserList />} />
+          <Route path="/users/:id/edit" element={<EditUser />} />
+        </Routes>
+      </Router>
+    </UserProvider>
   );
 }
 

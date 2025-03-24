@@ -1,37 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { UserContext } from "@context/UserContext";
 
-const UsersList = () => {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      setLoading(true);
-      try {
-        const response = await axios.get(
-          `https://reqres.in/api/users?page=${page}`
-        );
-        setUsers(response.data.data);
-        setTotalPages(response.data.total_pages);
-        setLoading(false);
-      } catch (error) {
-        setError(error.message || "Failed to fetch users");
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, [page]);
-
-  const handlePageChange = (newPage) => {
-    if (newPage >= 1 && newPage <= totalPages) {
-      setPage(newPage);
-    }
-  };
+const UserList = () => {
+  const {
+    users,
+    loading,
+    error,
+    page,
+    totalPages,
+    handlePageChange,
+    handleDelete,
+  } = useContext(UserContext);
 
   if (loading) {
     return <div>Loading users...</div>;
@@ -61,6 +42,20 @@ const UsersList = () => {
               {user.first_name} {user.last_name}
             </h3>
             <p className="text-center text-gray-600">{user.email}</p>
+            <div className="flex justify-center mt-4">
+              <Link
+                to={`/users/${user.id}/edit`}
+                className="bg-blue-300 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded mr-2"
+              >
+                Edit
+              </Link>
+              <button
+                className="bg-red-300 hover:bg-red-400 text-white font-bold py-2 px-4 rounded"
+                onClick={() => handleDelete(user.id)}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>
@@ -84,4 +79,4 @@ const UsersList = () => {
   );
 };
 
-export default UsersList;
+export default UserList;
